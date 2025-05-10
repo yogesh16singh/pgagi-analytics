@@ -7,7 +7,7 @@ import { useStockSearch } from "@/hooks/use-stock-search";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ALPHA_VANTAGE_API_KEY, API_ENDPOINTS } from "@/utils/apiConfig";
-import { ArrowDownRight, ArrowUpRight, AlertCircle } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, AlertCircle, TrendingUp } from "lucide-react";
 import { POPULAR_STOCKS, generateMockQuote } from "@/utils/stockData";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useLocalStorage } from "@/hooks/use-local-storage";
@@ -72,10 +72,16 @@ const Stocks = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6">
-        <h1 className="text-2xl font-bold">Stock Market Dashboard</h1>
+      <div className="space-y-8 p-6 max-w-7xl mx-auto">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h1 className="text-3xl font-bold tracking-tight">Stock Market Dashboard</h1>
+            <p className="text-muted-foreground">Track and analyze your favorite stocks in real-time</p>
+          </div>
+          <TrendingUp className="h-8 w-8 text-primary" />
+        </div>
 
-        <div className="max-w-md mb-6">
+        <div className="max-w-md">
           <SearchCombobox
             options={options}
             value={selectedStock}
@@ -89,19 +95,19 @@ const Stocks = () => {
         </div>
 
         {isUsingMockData && (
-          <Alert className="mb-6">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
+          <Alert className="mb-6 border-yellow-500/50 bg-yellow-500/10">
+            <AlertCircle className="h-4 w-4 text-yellow-500" />
+            <AlertDescription className="text-yellow-500">
               Using demo data. Real-time stock data is currently unavailable.
             </AlertDescription>
           </Alert>
         )}
         
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Key Metrics */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Key Metrics</CardTitle>
+          <Card className="shadow-lg hover:shadow-xl transition-shadow duration-200">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-xl">Key Metrics</CardTitle>
             </CardHeader>
             <CardContent>
               {quoteLoading ? (
@@ -110,13 +116,13 @@ const Stocks = () => {
                   <div className="h-6 w-3/4 bg-muted rounded" />
                 </div>
               ) : quoteData ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div>
-                    <div className="text-3xl font-bold">
+                    <div className="text-4xl font-bold tracking-tight">
                       ${quoteData.price.toFixed(2)}
                     </div>
-                    <div className={`flex items-center gap-1 text-lg ${
-                      isPositive ? 'text-success' : 'text-destructive'
+                    <div className={`flex items-center gap-1 text-lg font-medium ${
+                      isPositive ? 'text-emerald-600' : 'text-rose-600'
                     }`}>
                       {isPositive ? (
                         <ArrowUpRight className="h-5 w-5" />
@@ -127,26 +133,26 @@ const Stocks = () => {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <div className="text-muted-foreground">Open</div>
-                      <div className="font-medium">${quoteData.open.toFixed(2)}</div>
+                  <div className="grid grid-cols-2 gap-6 text-sm">
+                    <div className="space-y-1">
+                      <div className="text-muted-foreground font-medium">Open</div>
+                      <div className="font-semibold">${quoteData.open.toFixed(2)}</div>
                     </div>
-                    <div>
-                      <div className="text-muted-foreground">Previous Close</div>
-                      <div className="font-medium">${quoteData.prevClose.toFixed(2)}</div>
+                    <div className="space-y-1">
+                      <div className="text-muted-foreground font-medium">Previous Close</div>
+                      <div className="font-semibold">${quoteData.prevClose.toFixed(2)}</div>
                     </div>
-                    <div>
-                      <div className="text-muted-foreground">High</div>
-                      <div className="font-medium">${quoteData.high.toFixed(2)}</div>
+                    <div className="space-y-1">
+                      <div className="text-muted-foreground font-medium">High</div>
+                      <div className="font-semibold">${quoteData.high.toFixed(2)}</div>
                     </div>
-                    <div>
-                      <div className="text-muted-foreground">Low</div>
-                      <div className="font-medium">${quoteData.low.toFixed(2)}</div>
+                    <div className="space-y-1">
+                      <div className="text-muted-foreground font-medium">Low</div>
+                      <div className="font-semibold">${quoteData.low.toFixed(2)}</div>
                     </div>
-                    <div className="col-span-2">
-                      <div className="text-muted-foreground">Volume</div>
-                      <div className="font-medium">
+                    <div className="col-span-2 space-y-1">
+                      <div className="text-muted-foreground font-medium">Volume</div>
+                      <div className="font-semibold">
                         {quoteData.volume.toLocaleString()}
                       </div>
                     </div>
@@ -158,14 +164,18 @@ const Stocks = () => {
 
           {/* Chart */}
           <div className="lg:col-span-3">
-            <StockChartWidget symbol={selectedStock} />
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-200">
+              <CardContent className="p-6">
+                <StockChartWidget symbol={selectedStock} />
+              </CardContent>
+            </Card>
           </div>
 
           {/* Watchlist */}
           <div className="lg:col-span-4">
-            <Card>
+            <Card className="shadow-lg hover:shadow-xl transition-shadow duration-200">
               <CardHeader>
-                <CardTitle>Market Overview</CardTitle>
+                <CardTitle className="text-xl">Market Overview</CardTitle>
               </CardHeader>
               <CardContent>
                 <StockWidget 

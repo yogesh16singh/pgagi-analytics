@@ -91,32 +91,42 @@ const StockWidget = ({
     <WidgetCard 
       title="Market Watch" 
       isLoading={isLoading} 
-      className={className}
+      className={cn("overflow-hidden", className)}
     >
-      <div className="space-y-2">
+      <div className="divide-y divide-border/50">
         {stockItems?.map((stock) => (
           <div 
             key={stock.symbol} 
             className={cn(
-              "flex items-center justify-between p-3 rounded-lg transition-colors",
-              selectedStock === stock.symbol ? "bg-primary/10" : "hover:bg-muted/10",
-              "border border-transparent hover:border-muted/20"
+              "flex items-center justify-between p-4 transition-all duration-200",
+              selectedStock === stock.symbol 
+                ? "bg-primary/10 hover:bg-primary/15" 
+                : "hover:bg-muted/5",
+              "group"
             )}
           >
-            <div>
-              <div className="font-medium text-foreground/90">{stock.symbol}</div>
-              <div className="text-xs text-muted-foreground">{stock.name}</div>
+            <div className="space-y-1">
+              <div className="font-semibold text-foreground/90 group-hover:text-foreground">
+                {stock.symbol}
+              </div>
+              <div className="text-sm text-muted-foreground/80">
+                {stock.name}
+              </div>
             </div>
-            <div className="text-right">
-              <div className="font-medium text-foreground/90">${stock.price.toFixed(2)}</div>
+            <div className="text-right space-y-1">
+              <div className="font-semibold text-foreground/90 group-hover:text-foreground">
+                ${stock.price.toFixed(2)}
+              </div>
               <div className={cn(
-                "text-xs flex items-center justify-end font-medium",
-                stock.change >= 0 ? "text-emerald-500" : "text-rose-500"
+                "text-sm flex items-center justify-end font-medium",
+                stock.change >= 0 
+                  ? "text-emerald-500 group-hover:text-emerald-400" 
+                  : "text-rose-500 group-hover:text-rose-400"
               )}>
                 {stock.change >= 0 ? (
-                  <ArrowUpRight className="h-3 w-3 mr-1" />
+                  <ArrowUpRight className="h-3.5 w-3.5 mr-1" />
                 ) : (
-                  <ArrowDownRight className="h-3 w-3 mr-1" />
+                  <ArrowDownRight className="h-3.5 w-3.5 mr-1" />
                 )}
                 {Math.abs(stock.change).toFixed(2)}%
               </div>
