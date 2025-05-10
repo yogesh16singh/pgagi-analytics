@@ -82,11 +82,18 @@ const Index = () => {
 
   return (
     <MainLayout>
-      <div className="flex flex-col gap-4 p-4">
+      <div className="flex flex-col gap-4 p-4 bg-gradient-to-br from-background to-background/80">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-foreground">Analytics Overview</h1>
+          <h1 className="text-2xl font-bold text-foreground bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            Analytics Overview
+          </h1>
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={handleRefresh}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={handleRefresh}
+              className="bg-gradient-to-r from-primary/10 to-primary/5 hover:from-primary/20 hover:to-primary/10"
+            >
               <RefreshCw className={cn("mr-2 h-4 w-4", isRefreshing && "animate-spin")} />
               Refresh Data
             </Button>
@@ -94,52 +101,52 @@ const Index = () => {
         </div>
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <Card>
+          <Card className="bg-gradient-to-br from-primary/5 to-background hover:from-primary/10 hover:to-background/90 transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Views</CardTitle>
-              <Eye className="h-4 w-4 text-muted-foreground" />
+              <Eye className="h-4 w-4 text-primary" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12,345</div>
+              <div className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">12,345</div>
               <p className="text-xs text-muted-foreground">
                 +20.1% from last month
               </p>
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="bg-gradient-to-br from-blue-500/5 to-background hover:from-blue-500/10 hover:to-background/90 transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Users</CardTitle>
-              <Users className="h-4 w-4 text-muted-foreground" />
+              <Users className="h-4 w-4 text-blue-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2,345</div>
+              <div className="text-2xl font-bold bg-gradient-to-r from-blue-500 to-blue-500/60 bg-clip-text text-transparent">2,345</div>
               <p className="text-xs text-muted-foreground">
                 +15.3% from last month
               </p>
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="bg-gradient-to-br from-green-500/5 to-background hover:from-green-500/10 hover:to-background/90 transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Engagement Rate</CardTitle>
-              <Activity className="h-4 w-4 text-muted-foreground" />
+              <Activity className="h-4 w-4 text-green-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">89.2%</div>
+              <div className="text-2xl font-bold bg-gradient-to-r from-green-500 to-green-500/60 bg-clip-text text-transparent">89.2%</div>
               <p className="text-xs text-muted-foreground">
                 +4.2% from last month
               </p>
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="bg-gradient-to-br from-purple-500/5 to-background hover:from-purple-500/10 hover:to-background/90 transition-all duration-300">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="h-4 w-4 text-purple-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">3.2%</div>
+              <div className="text-2xl font-bold bg-gradient-to-r from-purple-500 to-purple-500/60 bg-clip-text text-transparent">3.2%</div>
               <p className="text-xs text-muted-foreground">
                 +1.1% from last month
               </p>
@@ -148,9 +155,9 @@ const Index = () => {
         </div>
         
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-          <Card className="col-span-4">
+          <Card className="col-span-4 bg-gradient-to-br from-background to-background/95">
             <CardHeader>
-              <CardTitle>Performance Metrics</CardTitle>
+              <CardTitle className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Performance Metrics</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
               <ChartContainer
@@ -179,38 +186,56 @@ const Index = () => {
                   { name: "May", views: 1890, users: 4800 },
                   { name: "Jun", views: 2390, users: 3800 }
                 ]}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="views" stroke="var(--color-views)" />
-                  <Line type="monotone" dataKey="users" stroke="var(--color-users)" />
+                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted/20" />
+                  <XAxis dataKey="name" className="text-muted-foreground" />
+                  <YAxis className="text-muted-foreground" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      background: 'hsl(var(--background))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '0.5rem'
+                    }} 
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="views" 
+                    stroke="hsl(var(--primary))" 
+                    strokeWidth={2}
+                    dot={{ fill: 'hsl(var(--primary))' }}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="users" 
+                    stroke="hsl(var(--primary))" 
+                    strokeWidth={2}
+                    dot={{ fill: 'hsl(var(--primary))' }}
+                  />
                 </LineChart>
               </ChartContainer>
             </CardContent>
           </Card>
           
-          <Card className="col-span-3">
+          <Card className="col-span-3 bg-gradient-to-br from-background to-background/95">
             <CardHeader>
-              <CardTitle>Recent Activity</CardTitle>
+              <CardTitle className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">Recent Activity</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-8">
-                <div className="flex items-center">
+                <div className="flex items-center group">
                   <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">New User Registration</p>
+                    <p className="text-sm font-medium leading-none group-hover:text-primary transition-colors">New User Registration</p>
                     <p className="text-sm text-muted-foreground">2 minutes ago</p>
                   </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center group">
                   <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">Content Update</p>
+                    <p className="text-sm font-medium leading-none group-hover:text-primary transition-colors">Content Update</p>
                     <p className="text-sm text-muted-foreground">1 hour ago</p>
                   </div>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center group">
                   <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">System Maintenance</p>
+                    <p className="text-sm font-medium leading-none group-hover:text-primary transition-colors">System Maintenance</p>
                     <p className="text-sm text-muted-foreground">3 hours ago</p>
                   </div>
                 </div>
