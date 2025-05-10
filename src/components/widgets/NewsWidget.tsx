@@ -87,16 +87,16 @@ const NewsWidget = ({ className, category = "technology" }: NewsWidgetProps) => 
   };
 
   return (
-    <WidgetCard title="Latest News" isLoading={isLoading} className={className}>
+    <WidgetCard title="Latest News" isLoading={isLoading} className={cn("overflow-hidden", className)}>
       {isUsingMockData && (
-        <Alert className="mb-4">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
+        <Alert className="mb-4 border-l-4 border-yellow-500 bg-yellow-500/10">
+          <AlertCircle className="h-4 w-4 text-yellow-500" />
+          <AlertDescription className="text-yellow-700">
             Using demo data. Live news feed is currently unavailable.
           </AlertDescription>
         </Alert>
       )}
-      <div className="space-y-4">
+      <div className="space-y-3">
         {data?.map((item, index) => (
           <motion.a
             key={index}
@@ -104,34 +104,37 @@ const NewsWidget = ({ className, category = "technology" }: NewsWidgetProps) => 
             target="_blank"
             rel="noopener noreferrer"
             className="block"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
             whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <div className="group flex gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
-              <div className="relative block w-16 h-16 flex-shrink-0 rounded-md overflow-hidden">
+            <div className="group flex gap-4 p-3 rounded-xl hover:bg-muted/50 transition-all duration-300 border border-transparent hover:border-muted-foreground/20">
+              <div className="relative block w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden shadow-sm">
                 {!isUsingMockData && item.urlToImage ? (
                   <img 
                     src={item.urlToImage} 
                     alt={item.title}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                     onError={(e) => handleImageError(e, 'news')}
                   />
                 ) : (
-                  <div className="absolute inset-0 w-full h-full bg-muted flex items-center justify-center">
-                    <AlertCircle className="h-6 w-6 text-muted-foreground" />
+                  <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-muted to-muted/80 flex items-center justify-center">
+                    <AlertCircle className="h-6 w-6 text-muted-foreground/60" />
                   </div>
                 )}
               </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="font-medium text-sm line-clamp-2 group-hover:text-primary transition-colors">
+              <div className="flex-1 min-w-0 py-1">
+                <h4 className="font-medium text-sm line-clamp-2 group-hover:text-primary transition-colors duration-300">
                   {item.title}
-                  <ArrowUpRight className="inline-flex h-3 w-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <ArrowUpRight className="inline-flex h-3 w-3 ml-1 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0" />
                 </h4>
-                <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs font-medium px-1.5 py-0.5 rounded bg-muted">
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary">
                     {item.source.name}
                   </span>
-                  <span className="text-xs flex items-center text-muted-foreground">
+                  <span className="text-xs flex items-center text-muted-foreground/80">
                     <Clock className="h-3 w-3 mr-1" />
                     {formatDate(item.publishedAt)}
                   </span>
