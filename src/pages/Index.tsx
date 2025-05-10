@@ -6,7 +6,7 @@ import NewsWidget from "@/components/widgets/NewsWidget";
 import StockWidget from "@/components/widgets/StockWidget";
 import StockChartWidget from "@/components/widgets/StockChartWidget";
 import GitHubWidget from "@/components/widgets/GitHubWidget";
-import { RefreshCw, ArrowRight, TrendingUp } from "lucide-react";
+import { RefreshCw, ArrowRight, TrendingUp, Eye, Users, Activity } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -14,6 +14,9 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import { toast } from "sonner";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { cn } from "@/lib/utils";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { ChartContainer } from "@/components/ui/chart";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 // Animated widget container component
 const AnimatedWidget = ({ 
@@ -79,78 +82,141 @@ const Index = () => {
 
   return (
     <MainLayout>
-      <div className="space-y-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <motion.div 
-            className="flex items-center gap-2"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-          >
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleRefresh}
-              disabled={isRefreshing}
-              className="flex items-center gap-1"
-            >
-              <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-              <span>{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
+      <div className="flex flex-col gap-4 p-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-foreground">Analytics Overview</h1>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handleRefresh}>
+              <RefreshCw className={cn("mr-2 h-4 w-4", isRefreshing && "animate-spin")} />
+              Refresh Data
             </Button>
-          </motion.div>
+          </div>
         </div>
-
-        {/* First row: Weather, News, and Market Watch */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <AnimatedWidget index={0} onClick={() => navigate('/weather')}>
-            <WeatherWidget className="flex-1" unit={weatherUnit} />
-            <Link to="/weather" className="mt-2 text-xs text-right text-muted-foreground hover:text-foreground flex items-center justify-end">
-              View detailed weather <ArrowRight className="h-3 w-3 ml-1" />
-            </Link>
-          </AnimatedWidget>
+        
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Views</CardTitle>
+              <Eye className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">12,345</div>
+              <p className="text-xs text-muted-foreground">
+                +20.1% from last month
+              </p>
+            </CardContent>
+          </Card>
           
-          <AnimatedWidget index={1} onClick={() => navigate('/news')}>
-            <NewsWidget className="flex-1" category={newsCategory} />
-            <Link to="/news" className="mt-2 text-xs text-right text-muted-foreground hover:text-foreground flex items-center justify-end">
-              View all news <ArrowRight className="h-3 w-3 ml-1" />
-            </Link>
-          </AnimatedWidget>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Users</CardTitle>
+              <Users className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">2,345</div>
+              <p className="text-xs text-muted-foreground">
+                +15.3% from last month
+              </p>
+            </CardContent>
+          </Card>
           
-          <AnimatedWidget index={2} onClick={() => navigate('/stocks')}>
-            <StockWidget className="flex-1" />
-            <Link to="/stocks" className="mt-2 text-xs text-right text-muted-foreground hover:text-foreground flex items-center justify-end">
-              View detailed market data <ArrowRight className="h-3 w-3 ml-1" />
-            </Link>
-          </AnimatedWidget>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Engagement Rate</CardTitle>
+              <Activity className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">89.2%</div>
+              <p className="text-xs text-muted-foreground">
+                +4.2% from last month
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">3.2%</div>
+              <p className="text-xs text-muted-foreground">
+                +1.1% from last month
+              </p>
+            </CardContent>
+          </Card>
         </div>
-
-        {/* Second row: GitHub and Stock Monitoring */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <AnimatedWidget index={3} onClick={() => navigate('/github')}>
-            <GitHubWidget className="flex-1" />
-            <Link to="/github" className="mt-2 text-xs text-right text-muted-foreground hover:text-foreground flex items-center justify-end">
-              Explore GitHub repositories <ArrowRight className="h-3 w-3 ml-1" />
-            </Link>
-          </AnimatedWidget>
+        
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <Card className="col-span-4">
+            <CardHeader>
+              <CardTitle>Performance Metrics</CardTitle>
+            </CardHeader>
+            <CardContent className="pl-2">
+              <ChartContainer
+                config={{
+                  views: {
+                    label: "Views",
+                    theme: {
+                      light: "hsl(222.2 84% 4.9%)",
+                      dark: "hsl(210 40% 98%)"
+                    }
+                  },
+                  users: {
+                    label: "Users",
+                    theme: {
+                      light: "hsl(221.2 83.2% 53.3%)",
+                      dark: "hsl(217.2 91.2% 59.8%)"
+                    }
+                  }
+                }}
+              >
+                <LineChart data={[
+                  { name: "Jan", views: 4000, users: 2400 },
+                  { name: "Feb", views: 3000, users: 1398 },
+                  { name: "Mar", views: 2000, users: 9800 },
+                  { name: "Apr", views: 2780, users: 3908 },
+                  { name: "May", views: 1890, users: 4800 },
+                  { name: "Jun", views: 2390, users: 3800 }
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="views" stroke="var(--color-views)" />
+                  <Line type="monotone" dataKey="users" stroke="var(--color-users)" />
+                </LineChart>
+              </ChartContainer>
+            </CardContent>
+          </Card>
           
-          <AnimatedWidget index={4} onClick={() => navigate('/stocks')}>
-            {selectedStock ? (
-              <StockChartWidget symbol={selectedStock} />
-            ) : (
-              <div className="flex flex-col items-center justify-center h-full bg-card p-6 rounded-lg border">
-                <TrendingUp className="h-12 w-12 text-muted-foreground mb-4" />
-                <p className="text-muted-foreground text-center mb-4">
-                  Select a stock to monitor its performance
-                </p>
-                <Button size="sm" onClick={() => navigate('/stocks')}>
-                  Choose Stock
-                </Button>
+          <Card className="col-span-3">
+            <CardHeader>
+              <CardTitle>Recent Activity</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-8">
+                <div className="flex items-center">
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">New User Registration</p>
+                    <p className="text-sm text-muted-foreground">2 minutes ago</p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">Content Update</p>
+                    <p className="text-sm text-muted-foreground">1 hour ago</p>
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <div className="ml-4 space-y-1">
+                    <p className="text-sm font-medium leading-none">System Maintenance</p>
+                    <p className="text-sm text-muted-foreground">3 hours ago</p>
+                  </div>
+                </div>
               </div>
-            )}
-            <Link to="/stocks" className="mt-2 text-xs text-right text-muted-foreground hover:text-foreground flex items-center justify-end">
-              View detailed market data <ArrowRight className="h-3 w-3 ml-1" />
-            </Link>
-          </AnimatedWidget>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </MainLayout>
